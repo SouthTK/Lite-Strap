@@ -1,4 +1,4 @@
-package window.litestrap;
+package window.litestrap.internal;
 
 import java.io.IOException;
 

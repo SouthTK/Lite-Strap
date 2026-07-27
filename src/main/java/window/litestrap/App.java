@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import window.litestrap.internal.ProtocolRegister;
+
 public class App {
 
     public static void main(String[] args) {
