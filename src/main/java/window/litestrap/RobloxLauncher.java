@@ -1,10 +1,10 @@
 package window.litestrap;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class RobloxLauncher {
 
@@ -12,14 +12,13 @@ public class RobloxLauncher {
         // Find latest roblox version
         String localAppData = System.getenv("LOCALAPPDATA");
         File versionsFolder = new File(localAppData, "Roblox\\Versions");
-        File latestVersionDir = getLatestVersionFolder(versionsFolder);
+        File latestVersionFolder = getLatestVersionFolder(versionsFolder);
 
+        // Inject settings and launch Roblox
         if (latestVersionDir != null) {
-            injectClientSettings(latestVersionDir);
-            //launchRoblox(latestVersionDir, args);
-        } else {
-            System.err.println("Could not locate a valid Roblox installation.");
-        }
+            injectClientSettings(latestVersionFolder);
+            //launchRoblox(latestVersionFolder, args);
+        } else {System.out.println("Roblox not found");}
     }
 
     private static File getLatestVersionFolder(File parentDir) {
@@ -47,35 +46,25 @@ public class RobloxLauncher {
             String jarPath = RobloxLauncher.class.getProtectionDomain()
                     .getCodeSource().getLocation().toURI().getPath();
             String jarDir = new File(jarPath).getParent();
-            File clientSettings = new File(jarDir, "ClientSettings.json");
+            File settingsJson = new File(jarDir, "ClientAppSettings.json");
 
             // Injecting ClientSettings.json
-            if (!clientSettings.exists()) {
-                System.out.println("Cannot find " + clientSettings.getAbsolutePath());
+            if (!settingsJson.exists()) {
+                System.out.println("Cannot find " + settingsJson.getAbsolutePath());
                 return;
             } else {
                 System.out.println("Start injecting at " + versionFolder);
-                File clientSettingsDir = new File(versionFolder, "ClientSettings");
-                if (!clientSettingsDir.exists()) {clientSettingsDir.mkdirs();}
+
+                //Checking ClientSettings folder existance
+                File clientSettingsFolder = new File(versionFolder, "ClientSettings");
+                if (!clientSettingsFolder.exists()) {clientSettingsFolder.mkdirs();}
+
+                // Copy ClientAppSettings.json to ClientSettings folder
+                Path jsonPath = settingsJson.toPath();
+                Path destinationPath = clientSettingsFolder.toPath().resolve(jsonPath.getFileName());
+                Files.copy(jsonPath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
             }
-
         } catch (Exception e) {e.printStackTrace();}
-
-        
-
-        // File settingsFile = new File(clientSettingsDir, "ClientAppSettings.json");
-
-        // // Your custom JSON content/FastFlags // fix this to read from somewhere
-        // String jsonContent = "{\n" +
-        //         "  \"DFIntTaskSchedulerTargetFps\": 144\n" +
-        //         "}";
-
-        // try (FileWriter writer = new FileWriter(settingsFile)) {
-        //     writer.write(jsonContent);
-        //     System.out.println("Injected ClientAppSettings into: " + settingsFile.getAbsolutePath());
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
     }
 
     private static void launchRoblox(File versionFolder, String[] args) {
