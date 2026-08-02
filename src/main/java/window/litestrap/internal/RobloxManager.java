@@ -60,9 +60,7 @@ public class RobloxManager {
             if (args.length > 0) {
                 // Pass along Roblox launch parameters (e.g. roblox-player://...)
                 pb.command(exe.getAbsolutePath(), args[0]);
-            } else {
-                pb.command(exe.getAbsolutePath());
-            }
+            } else {pb.command(exe.getAbsolutePath());}
 
             pb.start();
         } catch (IOException e) {

@@ -11,7 +11,14 @@ import window.litestrap.internal.ProtocolRegister;
 public class App {
 
     public static void main(String[] args) {
-        String jarPath = "Test";
-        ProtocolRegister.registerProtocol(jarPath);
+        if (args.length == 0) {
+            System.out.println("No arguments were provided.");
+            return;
+        } else if (args[0].equals("register")) {
+            ProtocolRegister.registerProtocol();
+        } else if (args[0].equals("unregister")) {
+            ProtocolRegister.unregisterProtocol();
+        }
+        
     }
 }

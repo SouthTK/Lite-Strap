@@ -15,7 +15,7 @@ public class RobloxLauncher {
         // Inject settings and launch Roblox
         if (latestVersion != null) {
             RobloxManager.injectClientSettings(latestVersion);
-            //RobloxManager.launchRoblox(latestVersion, args);
+            RobloxManager.launchRoblox(latestVersion, args);
         } else {System.out.println("Roblox not found");}
     }
 }
