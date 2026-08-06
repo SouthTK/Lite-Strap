@@ -2,6 +2,8 @@ package window.litestrap.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 import java.net.URL;
+import java.net.URI;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,8 +26,10 @@ public class RobloxManager {
 
         try {
             ObjectMapper mapper = new ObjectMapper();
-            URL url = new URL("https://clientsettingscdn.roblox.com/v2/client-version/WindowsPlayer");
-            JsonNode rootNode = mapper.readTree(url);
+            String versionUri = "https://clientsettingscdn.roblox.com/v2/client-version/WindowsPlayer";
+            URL versionUrl = URI.create(versionUri).toURL();
+
+            JsonNode rootNode = mapper.readTree(versionUrl);
             latestVersion = rootNode.get("clientVersionUpload").asText();
 
         } catch (Exception e) {
@@ -39,9 +44,47 @@ public class RobloxManager {
         if (latestVersionFolder.exists() && latestVersionFolder.isDirectory()) {
             return latestVersionFolder;
         } else {
-            // download new version
-            System.out.println("Downloading new version");
-            // blah blah, TO DO: implement this
+            try {
+                String manifestUri = "https://setup.rbxcdn.com/" + latestVersion + "-rbxPkgManifest.txt";
+                URL manifestUrl = URI.create(manifestUri).toURL();
+
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(manifestUrl.openStream()))) {
+
+                    String header = reader.readLine(); 
+                    if (header == null || !header.trim().equalsIgnoreCase("v0")) {
+                        throw new IllegalStateException("Invalid manifest format or header: " + header);
+                    }
+
+                    String nameLine;
+                    // Loop through repeating 4-line blocks
+                    while ((nameLine = reader.readLine()) != null) {
+                        if (nameLine.trim().isEmpty()) continue;
+
+                        String name = nameLine.trim();
+                        String md5 = reader.readLine().trim();
+                        long compressedSize = Long.parseLong(reader.readLine().trim());
+                        long uncompressedSize = Long.parseLong(reader.readLine().trim());
+
+                        System.out.println(name);
+                        System.out.println(md5);
+                        System.out.println(compressedSize);
+                        System.out.println(uncompressedSize);
+                        // download the file, arranging into correct places
+                    }
+                } catch (Exception e) {
+                    System.err.println("Failed to read manifest");
+                }
+            } catch (Exception e) {System.err.println("Failed to get manifest");}
+
+            //TO DO: implement this
+            // "https://setup.rbxcdn.com/" + latestVersion + filename
+            // upzip and order into correct places
+
+            // RobloxApp -> version-xxxxxxxx folder
+            // content-sky.zip -> version-xxxxxxxx/context/sky folder
+            // so on so forth
+
+            // Installing WebView2
             return null;
         }
     }
@@ -67,6 +110,8 @@ public class RobloxManager {
 
                 Path destinationPath = clientSettingsFolder.toPath().resolve("ClientAppSettings.json");
                 Files.copy(settingsPath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+                
+                System.out.println("Injecting settings succeed");
             }
         } catch (Exception e) {e.printStackTrace();}
     }
@@ -77,7 +122,6 @@ public class RobloxManager {
             ProcessBuilder pb = new ProcessBuilder();
             
             if (args.length > 0) {
-                // Pass along Roblox launch parameters (e.g. roblox-player://...)
                 pb.command(exe.getAbsolutePath(), args[0]);
             } else {pb.command(exe.getAbsolutePath());}
 
