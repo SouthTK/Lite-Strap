@@ -2,35 +2,56 @@ package window.litestrap.internal;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+import java.net.URL;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class RobloxManager {
+    /**
+     * Check the newest Roblox version and install if not up-to-date
+     * @return The newest version folder of Roblox
+     */
+    public static File getLatestVersion() {
+        String latestVersion = null;
 
-    public static File getLatestVersion(File parentDir) {
-        File[] files = parentDir.listFiles();
-        File latest = null;
-        long lastModified = 0;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            URL url = new URL("https://clientsettingscdn.roblox.com/v2/client-version/WindowsPlayer");
+            JsonNode rootNode = mapper.readTree(url);
+            latestVersion = rootNode.get("clientVersionUpload").asText();
 
-        if (files != null) {
-            for (File file : files) {
-                File exe = new File(file, "RobloxPlayerBeta.exe");
-                if (file.isDirectory() && exe.exists()) {
-                    if (file.lastModified() > lastModified) {
-                        lastModified = file.lastModified();
-                        latest = file;
-                    }
-                }
-            }
+        } catch (Exception e) {
+            System.err.println("Cannot fetch newest version");
+            e.printStackTrace();
         }
-        return latest;
-    }
+        
+        String localAppData = System.getenv("LOCALAPPDATA");
+        File versionsFolder = new File(localAppData, "Roblox\\Versions");
+        File latestVersionFolder = new File(versionsFolder, latestVersion);
 
+        if (latestVersionFolder.exists() && latestVersionFolder.isDirectory()) {
+            return latestVersionFolder;
+        } else {
+            // download new version
+            System.out.println("Downloading new version");
+            // blah blah, TO DO: implement this
+            return null;
+        }
+    }
+    /**
+     * Read the ClientAppSettings.json from target folder, and copy to the ClientSettings folder
+     * in the version folder 
+     * @param versionFolder  The version folder where the ClientSettings is injected
+     */
     public static void injectClientSettings(File versionFolder) {
         try {
-            // Get current directory of the JAR file & path of ClientAppSettings.json
             String jarPath = RobloxManager.class.getProtectionDomain()
                     .getCodeSource().getLocation().toURI().getPath();
             String jarDir = new File(jarPath).getParent();
@@ -41,11 +62,9 @@ public class RobloxManager {
             } else {
                 System.out.println("Start injecting at " + versionFolder);
 
-                //Checking ClientSettings folder existance
                 File clientSettingsFolder = new File(versionFolder, "ClientSettings");
                 if (!clientSettingsFolder.exists()) {clientSettingsFolder.mkdirs();}
 
-                // Copy ClientAppSettings.json from current location to ClientSettings folder
                 Path destinationPath = clientSettingsFolder.toPath().resolve("ClientAppSettings.json");
                 Files.copy(settingsPath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
             }

@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>window.litestrap</groupId>
-  <artifactId>liteStrap</artifactId>
+  <artifactId>LiteStrap</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>liteStrap</name>
@@ -14,6 +14,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
+    <!-- <main.class>window.litestrap.RobloxLauncher</main.class> -->
   </properties>
 
   <dependencyManagement>
@@ -39,6 +40,11 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
       <scope>test</scope>
+    </dependency>
+      <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.18.2</version> 
     </dependency>
   </dependencies>
 

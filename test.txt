@@ -1,2 +1,4 @@
 mvn exec:java -Dexec.mainClass="window.litestrap.App"
 mvn exec:java -Dexec.mainClass="window.litestrap.RobloxLauncher"
+
+mvn exec:java -Dexec.mainClass="window.litestrap.App" -Dexec.args="roblox-player:"
