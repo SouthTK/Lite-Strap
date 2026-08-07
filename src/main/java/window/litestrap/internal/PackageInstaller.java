@@ -47,27 +47,28 @@ public class PackageInstaller {
             throw new RuntimeException("Failed to download zip! HTTP Status Code: " + response.statusCode());
         }
 
-        try (ZipInputStream zis = new ZipInputStream(response.body())) {
-            ZipEntry entry;
-            while ((entry = zis.getNextEntry()) != null) {
-                // Resolve entry destination path safely
-                Path filePath = targetVersionFolder.resolve(entry.getName()).normalize();
+        //TO DO: Recheck and implement these, might need fix
+        // try (ZipInputStream zis = new ZipInputStream(response.body())) {
+        //     ZipEntry entry;
+        //     while ((entry = zis.getNextEntry()) != null) {
+        //         // Resolve entry destination path safely
+        //         Path filePath = targetVersionFolder.resolve(entry.getName()).normalize();
 
-                // Zip Slip vulnerability check
-                if (!filePath.startsWith(targetVersionFolder)) {
-                    throw new SecurityException("Bad entry path in zip: " + entry.getName());
-                }
+        //         // Zip Slip vulnerability check
+        //         if (!filePath.startsWith(targetVersionFolder)) {
+        //             throw new SecurityException("Bad entry path in zip: " + entry.getName());
+        //         }
 
-                if (entry.isDirectory()) {
-                    Files.createDirectories(filePath);
-                } else {
-                    // Ensure parent directory exists before writing file
-                    Files.createDirectories(filePath.getParent());
-                    Files.copy(zis, filePath, StandardCopyOption.REPLACE_EXISTING);
-                }
-                zis.closeEntry();
-            }
-        }
+        //         if (entry.isDirectory()) {
+        //             Files.createDirectories(filePath);
+        //         } else {
+        //             // Ensure parent directory exists before writing file
+        //             Files.createDirectories(filePath.getParent());
+        //             Files.copy(zis, filePath, StandardCopyOption.REPLACE_EXISTING);
+        //         }
+        //         zis.closeEntry();
+        //     }
+        // }
     }
 
 }

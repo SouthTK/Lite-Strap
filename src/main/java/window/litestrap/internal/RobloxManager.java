@@ -94,7 +94,9 @@ public class RobloxManager {
     public static void injectClientSettings(File versionFolder) {
         try {
             String jarPath = RobloxManager.class.getProtectionDomain()
-                    .getCodeSource().getLocation().toURI().getPath();
+                    .getCodeSource()
+                    .getLocation()
+                    .toURI().getPath();
             String jarDir = new File(jarPath).getParent();
             Path settingsPath = Paths.get(jarDir, "ClientAppSettings.json");
 
