@@ -56,7 +56,6 @@ public class RobloxManager {
                     }
 
                     String nameLine;
-                    // Loop through repeating 4-line blocks
                     while ((nameLine = reader.readLine()) != null) {
                         if (nameLine.trim().isEmpty()) continue;
 
@@ -69,7 +68,10 @@ public class RobloxManager {
                         System.out.println(md5);
                         System.out.println(compressedSize);
                         System.out.println(uncompressedSize);
-                        // download the file, arranging into correct places
+
+                        try {
+                            PackageInstaller.installPackage(latestVersion, name);
+                        } catch (Exception e) {System.err.println("Failed to download" + name);}
                     }
                 } catch (Exception e) {
                     System.err.println("Failed to read manifest");
@@ -77,14 +79,10 @@ public class RobloxManager {
             } catch (Exception e) {System.err.println("Failed to get manifest");}
 
             //TO DO: implement this
-            // "https://setup.rbxcdn.com/" + latestVersion + filename
-            // upzip and order into correct places
-
-            // RobloxApp -> version-xxxxxxxx folder
-            // content-sky.zip -> version-xxxxxxxx/context/sky folder
-            // so on so forth
 
             // Installing WebView2
+
+            // Remove old installation
             return null;
         }
     }
