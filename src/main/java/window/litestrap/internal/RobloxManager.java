@@ -71,19 +71,28 @@ public class RobloxManager {
 
                         try {
                             PackageInstaller.installPackage(latestVersion, name);
-                        } catch (Exception e) {System.err.println("Failed to download" + name);}
+                        } catch (Exception e) {
+                            System.err.println("Failed to download " + name);
+                            e.printStackTrace();
+                            }
                     }
+
+                    
                 } catch (Exception e) {
                     System.err.println("Failed to read manifest");
+                    return null;
                 }
-            } catch (Exception e) {System.err.println("Failed to get manifest");}
+            } catch (Exception e) {
+                System.err.println("Failed to get manifest");
+                return null;
+                }
 
             //TO DO: implement this
 
             // Installing WebView2
 
             // Remove old installation
-            return null;
+            return latestVersionFolder;
         }
     }
     /**

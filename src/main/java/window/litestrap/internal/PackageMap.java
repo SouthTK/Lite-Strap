@@ -35,14 +35,22 @@ public class PackageMap {
         Map.entry("RobloxApp.zip",                Paths.get(""))
 
         // No need for Roblox Installer
+        // How about content-platform-dictionaries??
+        // Detect unkown file and return null or something
     );
 
     public static Path get(String fileName) {
-        // String localAppData = System.getenv("LOCALAPPDATA");
-        // Path versionsFolder = Paths.get(localAppData, "Roblox", "Versions");
-        // Path targetVersionDir = versionsFolder.resolve(version);
         Path resultedPath = packageMap.get(fileName);
-        if (resultedPath == null) {return Paths.get("");}
+        if (resultedPath == null) {
+            System.out.println("Unknown package from " + fileName);
+            try {
+            // Pause the main execution thread for 2000 milliseconds (2 seconds)
+            Thread.sleep(2000); 
+            } catch (InterruptedException e) {
+                System.err.println("The thread was interrupted while sleeping!");
+            }
+            return Paths.get("");
+            }
         else {return resultedPath;}
     }
 }
