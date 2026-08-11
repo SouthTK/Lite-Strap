@@ -28,7 +28,7 @@ public class PackageInstaller {
                 .followRedirects(HttpClient.Redirect.ALWAYS)
                 .build();
 
-        // // Check if latest version folder did not exist, create
+        // Check if latest version folder did not exist, create
         if (!Files.exists(latestVersionFolder.resolve("RobloxPlayerBeta.exe"))) {
             Files.createDirectories(latestVersionFolder);
             System.out.println("Created directory: " + latestVersionFolder);
@@ -44,34 +44,28 @@ public class PackageInstaller {
             throw new RuntimeException("Failed to download zip! HTTP Status Code: " + response.statusCode());
         }
 
-        //TO DO: Recheck and implement these, might need fix
         try (ZipInputStream zis = new ZipInputStream(response.body())) {
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
-                // Resolve entry destination path safely
                 Path filePath = targetFolder.resolve(entry.getName()).normalize();
-                // DEBUG
+                
                 System.out.println("Target folder: " + targetFolder);
                 System.out.println("File : " + entry.getName());
                 System.out.println("Will be in " + filePath);
 
-                // Zip Slip vulnerability check
-                if (!filePath.startsWith(targetFolder)) {
-                    continue;
-                    //throw new SecurityException("Bad entry path in zip: " + entry.getName());
-                }
+                // Zip Slip (path traversal) vulnerability & "\" check
+                if (!filePath.startsWith(targetFolder)) {continue;}
 
                 if (entry.isDirectory()) {
                     Files.createDirectories(filePath);
                 } else {
-                    // Ensure parent directory exists before writing file
                     Files.createDirectories(filePath.getParent());
                     Files.copy(zis, filePath, StandardCopyOption.REPLACE_EXISTING);
                     System.out.println(filePath);
                 }
                 zis.closeEntry();
             }
-        }
+        } catch (Exception e) {}
     }
 
 }

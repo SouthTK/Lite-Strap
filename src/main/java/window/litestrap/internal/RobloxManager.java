@@ -54,7 +54,8 @@ public class RobloxManager {
                     if (header == null || !header.trim().equalsIgnoreCase("v0")) {
                         throw new IllegalStateException("Invalid manifest format or header: " + header);
                     }
-
+                    // need check in case in-complete download/corrupt mid way
+                    // or check if existed ??
                     String nameLine;
                     while ((nameLine = reader.readLine()) != null) {
                         if (nameLine.trim().isEmpty()) continue;
