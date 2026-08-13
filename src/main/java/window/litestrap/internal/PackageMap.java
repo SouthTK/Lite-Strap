@@ -11,10 +11,6 @@ public class PackageMap {
         Map.entry("shaders.zip",                    Paths.get("shaders")),
         Map.entry("ssl.zip",                        Paths.get("ssl")),
 
-        // if WebView2 not install only
-        // Map.entry("WebView2.zip",                  Paths.get("")),
-        // Map.entry("WebView2RuntimeInstaller.zip",  Paths.get("WebView2RuntimeInstaller")),
-
         Map.entry("content-avatar.zip",            Paths.get("content", "avatar")),
         Map.entry("content-configs.zip",           Paths.get("content", "configs")),
         Map.entry("content-fonts.zip",             Paths.get("content", "fonts")),
@@ -33,8 +29,11 @@ public class PackageMap {
         Map.entry("extracontent-textures.zip",     Paths.get("ExtraContent", "textures")),
         Map.entry("extracontent-places.zip",       Paths.get("ExtraContent", "places")),
 
-        Map.entry("RobloxApp.zip",                Paths.get(""))
-        // Map.entry("WebView2.zip",                 Paths.get(""))
+        Map.entry("RobloxApp.zip",                Paths.get("")),
+        Map.entry("WebView2.zip",                 Paths.get(""))
+
+        // if WebView2Installer not install only
+        // Map.entry("WebView2RuntimeInstaller.zip",  Paths.get("WebView2RuntimeInstaller"))
 
         // No need for Roblox Installer
         // How about content-platform-dictionaries??

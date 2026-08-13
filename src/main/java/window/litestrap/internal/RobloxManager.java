@@ -82,16 +82,7 @@ public class RobloxManager {
                 return null;
                 }
 
-            //TO DO: implement this
-
-            // Installing WebView2
-
-            // Remove old installation
-
-            // Renamed back to latestVersion
-            try {
-                Files.move(temporaryFolder, latestVersionFolder);
-            } catch (IOException e) {
+            try {Files.move(temporaryFolder, latestVersionFolder);} catch (IOException e) {
                 // try rename again?
                 // clear the folder?
             }
