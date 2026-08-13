@@ -65,13 +65,8 @@ public class RobloxManager {
                         long compressedSize = Long.parseLong(reader.readLine().trim());
                         long uncompressedSize = Long.parseLong(reader.readLine().trim());
 
-                        System.out.println(name);
-                        System.out.println(md5);
-                        System.out.println(compressedSize);
-                        System.out.println(uncompressedSize);
-
                         try {
-                            PackageInstaller.installPackage(latestVersion, name);
+                            PackageInstaller.installPackage(latestVersion, name, latestVersionFolder.toPath());
                         } catch (Exception e) {
                             System.err.println("Failed to download " + name);
                             e.printStackTrace();
@@ -93,9 +88,17 @@ public class RobloxManager {
             // Installing WebView2
 
             // Remove old installation
+
+            // Renamed back to latestVersion
+            System.out.println("done");
             return latestVersionFolder;
         }
     }
+
+    // public static void deleteOldVersion() {
+
+    // }
+
     /**
      * Read the ClientAppSettings.json from target folder, and copy to the ClientSettings folder
      * in the version folder 

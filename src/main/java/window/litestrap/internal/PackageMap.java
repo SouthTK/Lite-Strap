@@ -11,8 +11,9 @@ public class PackageMap {
         Map.entry("shaders.zip",                    Paths.get("shaders")),
         Map.entry("ssl.zip",                        Paths.get("ssl")),
 
-        Map.entry("WebView2.zip",                  Paths.get("")),
-        Map.entry("WebView2RuntimeInstaller.zip",  Paths.get("WebView2RuntimeInstaller")),
+        // if WebView2 not install only
+        // Map.entry("WebView2.zip",                  Paths.get("")),
+        // Map.entry("WebView2RuntimeInstaller.zip",  Paths.get("WebView2RuntimeInstaller")),
 
         Map.entry("content-avatar.zip",            Paths.get("content", "avatar")),
         Map.entry("content-configs.zip",           Paths.get("content", "configs")),
@@ -33,6 +34,7 @@ public class PackageMap {
         Map.entry("extracontent-places.zip",       Paths.get("ExtraContent", "places")),
 
         Map.entry("RobloxApp.zip",                Paths.get(""))
+        // Map.entry("WebView2.zip",                 Paths.get(""))
 
         // No need for Roblox Installer
         // How about content-platform-dictionaries??
@@ -40,17 +42,6 @@ public class PackageMap {
     );
 
     public static Path get(String fileName) {
-        Path resultedPath = packageMap.get(fileName);
-        if (resultedPath == null) {
-            System.out.println("Unknown package from " + fileName);
-            try {
-            // Pause the main execution thread for 2000 milliseconds (2 seconds)
-            Thread.sleep(2000); 
-            } catch (InterruptedException e) {
-                System.err.println("The thread was interrupted while sleeping!");
-            }
-            return Paths.get("");
-            }
-        else {return resultedPath;}
+        return packageMap.get(fileName);
     }
 }

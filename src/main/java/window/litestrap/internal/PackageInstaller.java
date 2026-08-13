@@ -17,44 +17,35 @@ import java.util.zip.ZipInputStream;
 
 public class PackageInstaller {
 
-    public static void installPackage(String version, String fileName) throws Exception {
+    public static void installPackage(String version, String fileName, Path targetRootPath) throws Exception {
 
-        String localAppData = System.getenv("LOCALAPPDATA");
-        Path versionsFolder = Paths.get(localAppData, "Roblox", "Versions");
-        Path latestVersionFolder = versionsFolder.resolve(version);
-        Path targetFolder = latestVersionFolder.resolve(PackageMap.get(fileName)); 
-
-        HttpClient client = HttpClient.newBuilder()
-                .followRedirects(HttpClient.Redirect.ALWAYS)
-                .build();
-
-        // Check if latest version folder did not exist, create
-        if (!Files.exists(latestVersionFolder.resolve("RobloxPlayerBeta.exe"))) {
-            Files.createDirectories(latestVersionFolder);
-            System.out.println("Created directory: " + latestVersionFolder);
+        if (!Files.exists(targetRootPath.resolve("RobloxPlayerBeta.exe"))) {
+            Files.createDirectories(targetRootPath);
+            System.out.println("Created directory: " + targetRootPath);
         }
+
+        Path relativePath = PackageMap.get(fileName);
+        if (relativePath == null || !Files.exists(targetRootPath)) {return;}
+        Path targetPath = targetRootPath.resolve(relativePath);
 
         String zipUrl = "https://setup.rbxcdn.com/" + version + "-" + fileName;
         System.out.println("Downloading from: " + zipUrl);
 
+        HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build();
         HttpRequest downloadReq = HttpRequest.newBuilder(URI.create(zipUrl)).GET().build();
         HttpResponse<InputStream> response = client.send(downloadReq, HttpResponse.BodyHandlers.ofInputStream());
 
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Failed to download zip! HTTP Status Code: " + response.statusCode());
+            throw new RuntimeException("Error occur. HTTP Code: " + response.statusCode());
         }
 
         try (ZipInputStream zis = new ZipInputStream(response.body())) {
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
-                Path filePath = targetFolder.resolve(entry.getName()).normalize();
-                
-                System.out.println("Target folder: " + targetFolder);
-                System.out.println("File : " + entry.getName());
-                System.out.println("Will be in " + filePath);
+                Path filePath = targetPath.resolve(entry.getName()).normalize();
 
                 // Zip Slip (path traversal) vulnerability & "\" check
-                if (!filePath.startsWith(targetFolder)) {continue;}
+                if (!filePath.startsWith(targetPath)) {continue;}
 
                 if (entry.isDirectory()) {
                     Files.createDirectories(filePath);
