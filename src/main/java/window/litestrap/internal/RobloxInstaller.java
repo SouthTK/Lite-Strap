@@ -19,7 +19,7 @@ import java.net.http.HttpResponse;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class PackageInstaller {
+public class RobloxInstaller {
     // this will be the installer
     public static boolean installRoblox(String version) {
         String localAppData = System.getenv("LOCALAPPDATA");
@@ -52,7 +52,7 @@ public class PackageInstaller {
                         long uncompressedSize = Long.parseLong(reader.readLine().trim());
 
                         try {
-                            PackageInstaller.installPackage(version, name, temporaryFolder);
+                            RobloxInstaller.installPackage(version, name, temporaryFolder);
                         } catch (Exception e) {
                             System.err.println("Failed to download " + name);
                             e.printStackTrace();
@@ -81,7 +81,7 @@ public class PackageInstaller {
      * @param fileName  The name of the Zip file being installed
      * @param targetRootPath  The root where the installation happened (should be the version folder)
      */
-    public static void installPackage(String version, String fileName, Path targetRootPath) throws Exception {
+    private static void installPackage(String version, String fileName, Path targetRootPath) throws Exception {
 
         if (!Files.exists(targetRootPath.resolve("RobloxPlayerBeta.exe"))) {
             Files.createDirectories(targetRootPath);

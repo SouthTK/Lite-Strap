@@ -4,6 +4,7 @@ import java.nio.file.Path;
 
 import window.litestrap.internal.ProtocolRegister;
 import window.litestrap.internal.RobloxManager;
+import window.litestrap.internal.RobloxInstaller;
 
 public class App {
 
@@ -20,7 +21,8 @@ public class App {
             // return;
             
         } else if (args.length > 0 && args[0].startsWith("install-test")) {
-            Path latestVersion = RobloxManager.getLatestVersion();
+            String latestVersion = RobloxManager.getLatestVersion();
+            boolean status = RobloxInstaller.installRoblox(latestVersion);
         }
         // Otherwise
         // } else {
