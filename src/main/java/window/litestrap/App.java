@@ -18,14 +18,18 @@ public class App {
 
             // Inject settings and launch Roblox
             if (latestVersion != null) {
-                //RobloxManager.injectClientSettings(latestVersion);
-                //RobloxManager.launchRoblox(latestVersion, args);
+                RobloxManager.injectClientSettings(latestVersion);
+                RobloxManager.launchRoblox(latestVersion, args);
             } else {System.out.println("Roblox not found");}
             return;
-        // Otherwise
-        } else {
-            //File latestVersion = RobloxManager.getLatestVersion();
-            // do the protocol binding or UI?
+            
+        } else if (args.length > 0 && args[0].startsWith("install-test")) {
+            File latestVersion = RobloxManager.getLatestVersion();
         }
+        // Otherwise
+        // } else {
+        //     //File latestVersion = RobloxManager.getLatestVersion();
+        //     // do the protocol binding or UI?
+        // }
     }
 }
