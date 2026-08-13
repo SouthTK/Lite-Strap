@@ -16,7 +16,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class PackageInstaller {
-
+    /**
+     * Install and unzip the Zip file of the chosen version into the targetRootPath
+     * @param version  The version
+     * @param fileName  The name of the Zip file being installed
+     * @param targetRootPath  The root where the installation happened (should be the version folder)
+     */
     public static void installPackage(String version, String fileName, Path targetRootPath) throws Exception {
 
         if (!Files.exists(targetRootPath.resolve("RobloxPlayerBeta.exe"))) {
@@ -38,7 +43,7 @@ public class PackageInstaller {
         if (response.statusCode() != 200) {
             throw new RuntimeException("Error occur. HTTP Code: " + response.statusCode());
         }
-
+        // might need check if a zip
         try (ZipInputStream zis = new ZipInputStream(response.body())) {
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {

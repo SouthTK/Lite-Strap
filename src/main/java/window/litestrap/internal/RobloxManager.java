@@ -21,7 +21,7 @@ public class RobloxManager {
      * Check the newest Roblox version and install if not up-to-date
      * @return The newest version folder of Roblox
      */
-    public static File getLatestVersion() {
+    public static Path getLatestVersion() {
         String latestVersion = null;
 
         try {
@@ -35,13 +35,15 @@ public class RobloxManager {
         } catch (Exception e) {
             System.err.println("Cannot fetch newest version");
             e.printStackTrace();
+            return null;
         }
         
         String localAppData = System.getenv("LOCALAPPDATA");
-        File versionsFolder = new File(localAppData, "Roblox\\Versions");
-        File latestVersionFolder = new File(versionsFolder, latestVersion);
+        Path versionsFolder = Path.of(localAppData, "Roblox", "Versions");
+        Path temporaryFolder = versionsFolder.resolve(latestVersion + "-temp");
+        Path latestVersionFolder = versionsFolder.resolve(latestVersion);
 
-        if (latestVersionFolder.exists() && latestVersionFolder.isDirectory()) {
+        if (Files.isDirectory(latestVersionFolder)) {
             return latestVersionFolder;
         } else {
             try {
@@ -54,8 +56,7 @@ public class RobloxManager {
                     if (header == null || !header.trim().equalsIgnoreCase("v0")) {
                         throw new IllegalStateException("Invalid manifest format or header: " + header);
                     }
-                    // need check in case in-complete download/corrupt mid way
-                    // or check if existed ??
+
                     String nameLine;
                     while ((nameLine = reader.readLine()) != null) {
                         if (nameLine.trim().isEmpty()) continue;
@@ -66,14 +67,12 @@ public class RobloxManager {
                         long uncompressedSize = Long.parseLong(reader.readLine().trim());
 
                         try {
-                            PackageInstaller.installPackage(latestVersion, name, latestVersionFolder.toPath());
+                            PackageInstaller.installPackage(latestVersion, name, temporaryFolder);
                         } catch (Exception e) {
                             System.err.println("Failed to download " + name);
                             e.printStackTrace();
                             }
                     }
-
-                    
                 } catch (Exception e) {
                     System.err.println("Failed to read manifest");
                     return null;
@@ -90,7 +89,13 @@ public class RobloxManager {
             // Remove old installation
 
             // Renamed back to latestVersion
-            System.out.println("done");
+            try {
+                Files.move(temporaryFolder, latestVersionFolder);
+            } catch (IOException e) {
+                // try rename again?
+                // clear the folder?
+            }
+
             return latestVersionFolder;
         }
     }
@@ -118,6 +123,8 @@ public class RobloxManager {
             } else {
                 System.out.println("Start injecting at " + versionFolder);
 
+                //Path clientSettingsPath = versionPath.resolve(ClientSettings);
+                //Files.createDirectories(targetRootPath);
                 File clientSettingsFolder = new File(versionFolder, "ClientSettings");
                 if (!clientSettingsFolder.exists()) {clientSettingsFolder.mkdirs();}
 
