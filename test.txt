@@ -5,3 +5,6 @@ mvn exec:java -Dexec.mainClass="window.litestrap.App" -Dexec.args="roblox-player
 
 ## Installer
 mvn exec:java -Dexec.mainClass="window.litestrap.App" -Dexec.args="install-test"
+
+## Injector
+mvn exec:java -Dexec.mainClass="window.litestrap.App" -Dexec.args="inject-test"

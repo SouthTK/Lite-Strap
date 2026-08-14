@@ -37,16 +37,12 @@ public class RobloxManager {
         }
     }
 
-    // public static void deleteOldVersion() {
-
-    // }
-
     /**
      * Read the ClientAppSettings.json from target folder, and copy to the ClientSettings folder
      * in the version folder 
      * @param versionFolder  The version folder where the ClientSettings is injected
      */
-    public static void injectClientSettings(File versionFolder) {
+    public static void injectClientSettings(String version) {
         try {
             String jarPath = RobloxManager.class.getProtectionDomain()
                     .getCodeSource()
@@ -58,14 +54,16 @@ public class RobloxManager {
             if (!Files.exists(settingsPath)) {
                 System.out.println("Cannot find " + settingsPath);
             } else {
-                System.out.println("Start injecting at " + versionFolder);
+                System.out.println("Start injecting for " + version);
 
-                //Path clientSettingsPath = versionPath.resolve(ClientSettings);
-                //Files.createDirectories(targetRootPath);
-                File clientSettingsFolder = new File(versionFolder, "ClientSettings");
-                if (!clientSettingsFolder.exists()) {clientSettingsFolder.mkdirs();}
+                String localAppData = System.getenv("LOCALAPPDATA");
+                Path versionsFolder = Path.of(localAppData, "Roblox", "Versions");
+                Path targetFolder = versionsFolder.resolve(version);
 
-                Path destinationPath = clientSettingsFolder.toPath().resolve("ClientAppSettings.json");
+                Path clientSettingsPath = targetFolder.resolve("ClientSettings");
+                Files.createDirectories(clientSettingsPath);
+
+                Path destinationPath = clientSettingsPath.resolve("ClientAppSettings.json");
                 Files.copy(settingsPath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
                 
                 System.out.println("Injecting settings succeed");
