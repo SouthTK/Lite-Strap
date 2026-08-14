@@ -16,11 +16,15 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class RobloxInstaller {
-    // this will be the installer
+    /**
+     * Install the chosen Roblox version
+     * @param version  The version to be downloaded
+     */
     public static boolean installRoblox(String version) {
         String localAppData = System.getenv("LOCALAPPDATA");
         Path versionsFolder = Path.of(localAppData, "Roblox", "Versions");
@@ -35,8 +39,8 @@ public class RobloxInstaller {
                 String manifestUri = "https://setup.rbxcdn.com/" + version + "-rbxPkgManifest.txt";
                 URL manifestUrl = URI.create(manifestUri).toURL();
 
+                // Note: Currently skip WebView2Installation (TO DO: update later)
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(manifestUrl.openStream()))) {
-
                     String header = reader.readLine(); 
                     if (header == null || !header.trim().equalsIgnoreCase("v0")) {
                         throw new IllegalStateException("Invalid manifest format or header: " + header);
@@ -67,12 +71,48 @@ public class RobloxInstaller {
                 return false;
                 }
 
-            try {Files.move(temporaryFolder, targetFolder);} catch (IOException e) {
-                // try rename again?
-                // clear the folder?
-            }
+            try {Files.move(temporaryFolder, targetFolder);} catch (IOException e) {return false;}
+            // set shortcut of RobloxPlayer
             return true;
         }
+    }
+
+    /**
+     * Remove old or corrupted installed version
+     * @param exemptVersion  The version to be exempted from clean up
+     */
+    public static boolean clearOldVersion(String exemptVersion) {
+        String localAppData = System.getenv("LOCALAPPDATA");
+        Path versionsFolder = Path.of(localAppData, "Roblox", "Versions");
+
+        try (var stream = Files.walk(versionsFolder)) {
+            List<Path> deleteList = stream
+                    .filter(Files::isDirectory)
+                    .filter(path -> !path.equals(versionsFolder)) 
+                    .filter(path -> !path.getFileName().toString().equals(exemptVersion))
+                    .filter(path -> Files.exists(path.resolve("RobloxPlayerBeta.exe")))
+                    .toList(); 
+            deleteList.forEach(path -> deleteDirectoryRecursively(path));
+            return true;
+        } catch (IOException e) {
+            System.err.println("An error occurred while cleaning up old folders: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Delete
+     * @param path The folder to be deleted
+     */
+    private static void deleteDirectoryRecursively(Path path) {
+        System.out.println("Delete " + path);
+        // try (var walk = Files.walk(path)) {
+        //     walk.sorted(Comparator.reverseOrder())
+        //         .map(Path::toFile)
+        //         .forEach(java.io.File::delete);
+        // } catch (IOException e) {
+        //     System.err.println("Failed to delete " + path + ": " + e.getMessage());
+        // }
     }
 
     /**
@@ -82,6 +122,8 @@ public class RobloxInstaller {
      * @param targetRootPath  The root where the installation happened (should be the version folder)
      */
     private static void installPackage(String version, String fileName, Path targetRootPath) throws Exception {
+        
+        if (!fileName.toLowerCase().endsWith(".zip")) {return;}
 
         if (!Files.exists(targetRootPath.resolve("RobloxPlayerBeta.exe"))) {
             Files.createDirectories(targetRootPath);
@@ -102,7 +144,7 @@ public class RobloxInstaller {
         if (response.statusCode() != 200) {
             throw new RuntimeException("Error occur. HTTP Code: " + response.statusCode());
         }
-        // might need check if a zip
+
         try (ZipInputStream zis = new ZipInputStream(response.body())) {
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {

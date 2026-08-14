@@ -22,7 +22,8 @@ public class App {
             
         } else if (args.length > 0 && args[0].startsWith("install-test")) {
             String latestVersion = RobloxManager.getLatestVersion();
-            boolean status = RobloxInstaller.installRoblox(latestVersion);
+            boolean installStatus = RobloxInstaller.installRoblox(latestVersion);
+            boolean cleanStatus = RobloxInstaller.clearOldVersion(latestVersion);
         }
         // Otherwise
         // } else {
