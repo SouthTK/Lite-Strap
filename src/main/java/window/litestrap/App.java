@@ -15,14 +15,17 @@ public class App {
             // boolean cleanStatus = RobloxInstaller.clearOldVersion(latestVersion);
 
             // // Inject settings and launch Roblox
-            // if (latestVersion != null) {
+            // if (installStatus && latestVersion != null) {
             //     RobloxManager.injectClientSettings(latestVersion);
             //     RobloxManager.launchRoblox(latestVersion, args);
-            // } else {System.out.println("Roblox not found");}
+            // } else {System.out.println("Roblox Not Found.");}
             // return;
 
-        } else if (args.length > 0 && args[0].startsWith("binding-roblox")) {
-            // bind registry key and such
+        } else if (args.length > 0 && args[0].startsWith("bind-roblox")) {
+            ProtocolRegister.registerProtocol();
+
+        } else if (args.length > 0 && args[0].startsWith("unbind-roblox")) {
+            // unbind
 
         } else if (args.length > 0 && args[0].startsWith("launch-ui")) {
             System.out.println("Not implemented");

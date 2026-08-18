@@ -8,3 +8,8 @@ mvn exec:java -Dexec.mainClass="window.litestrap.App" -Dexec.args="install-test"
 
 ## Injector
 mvn exec:java -Dexec.mainClass="window.litestrap.App" -Dexec.args="inject-test"
+
+## Binder
+mvn exec:java -Dexec.mainClass="window.litestrap.App" -Dexec.args="bind-roblox"
+mvn exec:exec -Dexec.executable="java" -Dexec.args="-jar target/LiteStrap-1.0-SNAPSHOT.jar bind-roblox
+java -jar target/LiteStrap-1.0-SNAPSHOT.jar bind-roblox"

@@ -49,7 +49,7 @@ public class RobloxManager {
                     .getLocation()
                     .toURI().getPath();
             String jarDir = new File(jarPath).getParent();
-            Path settingsPath = Paths.get(jarDir, "ClientAppSettings.json");
+            Path settingsPath = Paths.get(jarDir, "ClientAppSettings.json"); //could change
 
             if (!Files.exists(settingsPath)) {
                 System.out.println("Cannot find " + settingsPath);

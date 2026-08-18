@@ -2,29 +2,42 @@ package window.litestrap.internal;
 
 import java.io.IOException;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class ProtocolRegister {
 
     public static void registerProtocol() {
-        String appPath = "PLACEHOLDER";
-        //appPath will be path of RobloxLauncher class
-        String[] protocols = {"roblox-player", "roblox"};
-        // String javaPath = "C:\\Program Files\\Java\\jdk-17\\bin\\javaw.exe"; // Or path to user's javaw
-        // String jarPath = "C:\\path\\to\\your\\myapp.jar";
-        // String mainClass = "com.example.MainClass";
+        try {
+            String[] protocols = {"roblox-player", "roblox"};
 
-        // // Notice how we structure the quotes so arguments pass correctly
-        // String commandValue = "\"" + javaPath + "\" -cp \"" + jarPath + "\" " + mainClass + " \"%1\"";
+            String javaPath = "C:\\Program Files\\Java\\jdk-17\\bin\\javaw.exe"; 
+            String jarPath = ProtocolRegister.class.getProtectionDomain()
+                        .getCodeSource()
+                        .getLocation()
+                        .toURI().getPath();
+            String mainClass = "window.litestrap.App";
 
-        for (String protocol : protocols) {
-            try {
-                //runRegCommand("reg add HKCU\\Software\\Classes\\" + protocol + " /v \"URL Protocol\" /t REG_SZ /d \"\" /f");
-                //String commandValue = "\"" + appPath + "\" \"%1\"";
-                //runRegCommand("reg add HKCU\\Software\\Classes\\" + protocol + "\\shell\\open\\command /ve /t REG_SZ /d \"" + commandValue + "\" /f");
-                System.out.println("Successfully registered protocol: " + protocol);
-            } catch (Exception e) {
-                e.printStackTrace();
+            System.out.println("Jar path: " + jarPath);
+
+            //appPath will be path of App class
+
+            // String jarPath = "C:\\path\\to\\your\\myapp.jar";
+            // String mainClass = "com.example.MainClass";
+
+            // // Notice how we structure the quotes so arguments pass correctly
+            String commandValue = "\"" + javaPath + "\" -cp \"" + jarPath + "\" " + mainClass + " \"%1\"";
+
+            for (String protocol : protocols) {
+                try {
+                    //runRegCommand("reg add HKCU\\Software\\Classes\\" + protocol + " /v \"URL Protocol\" /t REG_SZ /d \"\" /f");
+                    //String commandValue = "\"" + appPath + "\" \"%1\"";
+                    //runRegCommand("reg add HKCU\\Software\\Classes\\" + protocol + "\\shell\\open\\command /ve /t REG_SZ /d \"" + commandValue + "\" /f");
+                    System.out.println("Successfully registered protocol: " + protocol);
+                } catch (Exception e) {System.err.println("Error binding registry.");}
             }
-        }
+        } catch (Exception e) {System.err.println("java.net.URISyntaxException");}
+        
     }
 
     public static void unregisterProtocol() {
