@@ -34,22 +34,28 @@ public class App {
                 try {
                     Scanner terminalScanner = new Scanner(System.in);
                     userInput = terminalScanner.nextInt();
-                } catch (Exception e) {System.out.println("Can't read input.");}
+                } catch (Exception e) {System.out.println(">> Can't read input.");}
 
                 if (userInput == 1) {
                     // placeholder
                 } else if (userInput == 2) {
                     // placeholder
                 } else if (userInput == 3) {
-                    System.out.println("Private server link:");
+                    System.out.println(">> Please enter server link:");
 
                     try {
                         Scanner terminalScanner = new Scanner(System.in);
-                        String link = terminalScanner.nextLine();
-                    } catch (Exception e) {System.out.println("Can't read input.");}
+                        String serverLink = terminalScanner.nextLine();
+                        RobloxLauncher.joinPrivateServer(serverLink);
+                    } catch (Exception e) {System.out.println(">> Can't read input.");}
 
                 } else {return;}
             }
+
+/**
+ * Code below is test only
+*/
+
         } else if (args.length > 0 && args[0].startsWith("install-test")) {
             String latestVersion = RobloxManager.getLatestVersion();
             boolean installStatus = RobloxInstaller.installRoblox(latestVersion);
