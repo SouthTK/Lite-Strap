@@ -2,6 +2,7 @@ package window.litestrap;
 
 import window.litestrap.roblox.RobloxManager;
 import window.litestrap.roblox.RobloxInstaller;
+import window.litestrap.roblox.UriMap;
 
 public class RobloxLauncher {
     public static void launchRoblox(String arg) {
@@ -15,13 +16,16 @@ public class RobloxLauncher {
         } else {System.out.println("Roblox Not Found.");}
         return;
     }
-// need fix
-    public static void joinPrivateServer(String arg) {
-        //String uri = "roblox://placeId=2753915549&linkCode=91514910542598960805867636178552";
+
+    public static void launchRobloxWithLink(String link) {
+        String uri = UriMap.getUri(link);
         String latestVersion = RobloxManager.getLatestVersion();
         boolean installStatus = RobloxInstaller.installRoblox(latestVersion);
         boolean cleanStatus = RobloxInstaller.clearOldVersion(latestVersion);
 
-        RobloxManager.runRobloxUri(latestVersion, arg);
+        if (uri != null ) {
+            RobloxManager.runRobloxUri(latestVersion, uri);
+        } else {return;}
+
     }
 }

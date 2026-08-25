@@ -99,11 +99,7 @@ s     */
             Path versionsFolder = Path.of(localAppData, "Roblox", "Versions");
             Path exe = versionsFolder.resolve(version).resolve("RobloxPlayerBeta.exe");
 
-            String encodedUrl = "https%3A%2F%2Fassetgame.roblox.com%2Fgame%2FPlaceLauncher.ashx%3Frequest%3DRequestPrivateGame%26placeId%3D2753915549%26linkCode%3D91514910542598960805867636178552";
-            long launchTime = System.currentTimeMillis();
-
-            ProcessBuilder pb = new ProcessBuilder(exe.toString(), "--launchmode=play",
-                    "--gameinfo=" + encodedUrl, "--launchtime=" + launchTime);
+            ProcessBuilder pb = new ProcessBuilder(exe.toString(), "--deeplink", uri);
             pb.start();
         } catch (IOException e) {
             e.printStackTrace();

@@ -14,9 +14,6 @@ public class App {
         if (args.length > 0 && args[0].startsWith("roblox-player:")) {
             RobloxLauncher.launchRoblox(args[0]);
 
-        } else if (args.length > 0 && args[0].startsWith("launch-ui")) {
-            // launch UI (not implemented)
-
         } else if (args.length > 0 && args[0].startsWith("terminal")) {
             System.out.println("  _       _   _                        ____    _  ");
             System.out.println(" | |     (_) | |_    ___              / ___|  | |_   _ __    __ _   _ __  ");
@@ -26,7 +23,7 @@ public class App {
             System.out.println("                                                                   |_|");
             System.out.println("[1] Bind Roblox (not implemented)");
             System.out.println("[2] Unind Roblox (not implemented)");
-            System.out.println("[3] Join Roblox Private Server");
+            System.out.println("[3] Join with link");
             System.out.println("[4] Quit");
 
             int userInput = 0;
@@ -34,20 +31,21 @@ public class App {
                 try {
                     Scanner terminalScanner = new Scanner(System.in);
                     userInput = terminalScanner.nextInt();
-                } catch (Exception e) {System.out.println(">> Can't read input.");}
+                } catch (Exception e) {System.err.println("Can't read input.");}
 
                 if (userInput == 1) {
                     // placeholder
                 } else if (userInput == 2) {
                     // placeholder
                 } else if (userInput == 3) {
-                    System.out.println(">> Please enter server link:");
+
+                    System.out.println("[] Please enter the link:");
 
                     try {
                         Scanner terminalScanner = new Scanner(System.in);
-                        String serverLink = terminalScanner.nextLine();
-                        RobloxLauncher.joinPrivateServer(serverLink);
-                    } catch (Exception e) {System.out.println(">> Can't read input.");}
+                        String link = terminalScanner.nextLine();
+                        RobloxLauncher.launchRobloxWithLink(link);
+                    } catch (Exception e) {System.err.println("Can't read input.");}
 
                 } else {return;}
             }
