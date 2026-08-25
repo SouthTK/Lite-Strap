@@ -1,4 +1,4 @@
-package window.litestrap.internal;
+package window.litestrap.roblox;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

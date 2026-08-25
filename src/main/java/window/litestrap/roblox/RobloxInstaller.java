@@ -1,4 +1,4 @@
-package window.litestrap.internal;
+package window.litestrap.roblox;
 
 import java.io.InputStream;
 import java.io.IOException;

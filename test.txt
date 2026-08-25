@@ -2,6 +2,8 @@ mvn exec:java -Dexec.mainClass="window.litestrap.App"
 mvn exec:java -Dexec.mainClass="window.litestrap.RobloxLauncher"
 
 mvn exec:java -Dexec.mainClass="window.litestrap.App" -Dexec.args="roblox-player:"
+## Terminal
+mvn exec:java -Dexec.mainClass="window.litestrap.App" -Dexec.args="terminal"
 
 ## Installer
 mvn exec:java -Dexec.mainClass="window.litestrap.App" -Dexec.args="install-test"

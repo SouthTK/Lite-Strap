@@ -1,4 +1,4 @@
-package window.litestrap.internal;
+package window.litestrap.roblox;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,16 +71,18 @@ public class RobloxManager {
         } catch (Exception e) {e.printStackTrace();}
     }
 
-    public static void launchRoblox(String version, String[] args) {
+    /**
+     * Running RobloxPlayerBeta
+s     */
+    public static void startRoblox(String version, String arg) {
         try {
             String localAppData = System.getenv("LOCALAPPDATA");
             Path versionsFolder = Path.of(localAppData, "Roblox", "Versions");
             Path exe = versionsFolder.resolve(version).resolve("RobloxPlayerBeta.exe");
 
             ProcessBuilder pb = new ProcessBuilder();
-            if (args.length > 0) {
-                pb.command(exe.toString(), args[0]);
-            } else {pb.command(exe.toString());}
+            if (arg == null) { pb.command(exe.toString());} 
+            else {pb.command(exe.toString(), arg);}
 
             pb.start();
         } catch (IOException e) {
