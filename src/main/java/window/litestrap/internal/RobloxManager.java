@@ -71,14 +71,16 @@ public class RobloxManager {
         } catch (Exception e) {e.printStackTrace();}
     }
 
-    public static void launchRoblox(File versionFolder, String[] args) {
+    public static void launchRoblox(String version, String[] args) {
         try {
-            File exe = new File(versionFolder, "RobloxPlayerBeta.exe");
+            String localAppData = System.getenv("LOCALAPPDATA");
+            Path versionsFolder = Path.of(localAppData, "Roblox", "Versions");
+            Path exe = versionsFolder.resolve(version).resolve("RobloxPlayerBeta.exe");
+
             ProcessBuilder pb = new ProcessBuilder();
-            
             if (args.length > 0) {
-                pb.command(exe.getAbsolutePath(), args[0]);
-            } else {pb.command(exe.getAbsolutePath());}
+                pb.command(exe.toString(), args[0]);
+            } else {pb.command(exe.toString());}
 
             pb.start();
         } catch (IOException e) {
