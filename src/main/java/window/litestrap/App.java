@@ -62,7 +62,7 @@ public class App {
                     } catch (Exception e) {System.err.println("Invalid input");}
 
                 } else if (userInput == 5) {
-                    Terminal.printManual();
+                    Terminal.printHelpOption();
                 } else {return;}
             }
 

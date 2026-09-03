@@ -9,7 +9,7 @@ public class Terminal {
         catch (Exception e) {}
     }
 
-    public static void printManual() {
+    public static void printHelpOption() {
         Terminal.clear();
 
         System.out.println("For help with using the programm, please read at the link below.");
@@ -18,6 +18,31 @@ public class Terminal {
 
         Scanner terminalScanner = new Scanner(System.in);
         String input = terminalScanner.nextLine();
+
+    }
+
+    public static void printUrlOption() {
+        boolean validity = true; 
+        Terminal.clear();
+
+        // while (true) {
+        //     System.out.println("To return, please press 'Enter'");
+        //     System.out.println("To join Roblox with URL, please enter the URL");
+
+        //     try {
+        //         Scanner terminalScanner = new Scanner(System.in);
+        //         String link = terminalScanner.nextLine();
+
+        //         if (link.equals("")) {
+        //             return;
+        //         } else {
+        //             if (!RobloxLauncher.launchRobloxWithLink(link)) {
+        //                 System.out.println("Invalid URL");}
+        //         }
+
+
+        //     } catch (Exception e) {}
+        // }
 
     }
 }

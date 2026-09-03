@@ -17,7 +17,7 @@ public class RobloxLauncher {
         return;
     }
 
-    public static void launchRobloxWithLink(String link) {
+    public static boolean launchRobloxWithLink(String link) {
         String uri = UriMap.getUri(link);
 
         if (uri != null ) {
@@ -25,7 +25,9 @@ public class RobloxLauncher {
             boolean installStatus = RobloxInstaller.installRoblox(latestVersion);
             boolean cleanStatus = RobloxInstaller.clearOldVersion(latestVersion);
             RobloxManager.runRobloxUri(latestVersion, uri);
-        } else {return;}
+            return true;
+            
+        } else {return false;}
 
     }
 }
