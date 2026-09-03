@@ -19,11 +19,11 @@ public class RobloxLauncher {
 
     public static void launchRobloxWithLink(String link) {
         String uri = UriMap.getUri(link);
-        String latestVersion = RobloxManager.getLatestVersion();
-        boolean installStatus = RobloxInstaller.installRoblox(latestVersion);
-        boolean cleanStatus = RobloxInstaller.clearOldVersion(latestVersion);
 
         if (uri != null ) {
+            String latestVersion = RobloxManager.getLatestVersion();
+            boolean installStatus = RobloxInstaller.installRoblox(latestVersion);
+            boolean cleanStatus = RobloxInstaller.clearOldVersion(latestVersion);
             RobloxManager.runRobloxUri(latestVersion, uri);
         } else {return;}
 
