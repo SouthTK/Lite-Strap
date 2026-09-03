@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 import window.litestrap.internal.ProtocolRegister;
-import window.litestrap.internal.TerminalCleaner;
+import window.litestrap.internal.Terminal;
 import window.litestrap.roblox.RobloxManager;
 import window.litestrap.roblox.RobloxInstaller;
 
@@ -18,7 +18,7 @@ public class App {
         } else if (args.length > 0 && args[0].startsWith("terminal")) {
 
             int userInput = 0;
-            while (userInput != 4) {
+            while (userInput != 6) {
                 Terminal.clear();
                 System.out.println("  _       _   _                        ____    _  ");
                 System.out.println(" | |     (_) | |_    ___              / ___|  | |_   _ __    __ _   _ __  ");
@@ -28,42 +28,41 @@ public class App {
                 System.out.println("                                                                   |_|");
                 System.out.println("[1] Bind Roblox");
                 System.out.println("[2] Unind Roblox");
-                System.out.println("[3] Apply settings")
-                System.out.println("[4] Join with link");
+                System.out.println("[3] Apply settings");
+                System.out.println("[4] Join with URL");
                 System.out.println("[5] Help");
                 System.out.println("[6] Quit");
 
                 try {
                     Scanner terminalScanner = new Scanner(System.in);
                     userInput = terminalScanner.nextInt();
-                } catch (Exception e) {
-                    // invalid, do nothing
-                    }
+                } catch (Exception e) {}
 
                 if (userInput == 1) {
-                    System.err.println("Not implemented");
-
+                    // not implemented
                 } else if (userInput == 2) {
-                    System.err.println("Not implemented");
+                    // not implemented
+                    
                 } else if (userInput == 3) {
-                    System.err.println("Not implemented");
-
+                    // try finding json?
+                    // install if outdated
+                    // inject into Roblox
 
                 } else if (userInput == 4) {
                     Terminal.clear();
-                    System.out.println("[] Please enter the link:");
+                    System.out.println("To return, please press 'Enter'");
+                    System.out.println("To join Roblox with URL, please enter the URL");
 
                     try {
                         Scanner terminalScanner = new Scanner(System.in);
                         String link = terminalScanner.nextLine();
 
-                        if (link.equals("q")) {continue;}
-                        else {RobloxLauncher.launchRobloxWithLink(link);}
+                        if (!link.equals("")) {RobloxLauncher.launchRobloxWithLink(link);}
 
-                    } catch (Exception e) {System.err.println("Can't read input.");}
+                    } catch (Exception e) {System.err.println("Invalid input");}
 
                 } else if (userInput == 5) {
-                    System.err.println("Not implemented");
+                    Terminal.printManual();
                 } else {return;}
             }
 
