@@ -20,16 +20,17 @@ public class ProtocolRegister {
 
             System.out.println("Jar path: " + jarPath);
 
-            //appPath will be path of App class
-
-            // String jarPath = "C:\\path\\to\\your\\myapp.jar";
-            // String mainClass = "com.example.MainClass";
-
             // // Notice how we structure the quotes so arguments pass correctly
             String commandValue = "\"" + javaPath + "\" -cp \"" + jarPath + "\" " + mainClass + " \"%1\"";
 
             for (String protocol : protocols) {
                 try {
+                    // alternative
+                    // check if roblox registry is already there
+                    // if yes -> replace roblox registry
+                    // if no -> tell user to reinstall roblox or create one??
+
+
                     //runRegCommand("reg add HKCU\\Software\\Classes\\" + protocol + " /v \"URL Protocol\" /t REG_SZ /d \"\" /f");
                     //String commandValue = "\"" + appPath + "\" \"%1\"";
                     //runRegCommand("reg add HKCU\\Software\\Classes\\" + protocol + "\\shell\\open\\command /ve /t REG_SZ /d \"" + commandValue + "\" /f");
@@ -44,6 +45,9 @@ public class ProtocolRegister {
         String[] protocols = {"roblox-player", "roblox"};
         for (String protocol : protocols) {
             try {
+                // alternative 
+                // replace the protocol value at \shell\open\command to RobloxPlayerBeta.exe
+                
                 runRegCommand("reg delete HKCU\\Software\\Classes\\" + protocol + " /f");
                 System.out.println("Successfully removed protocol: " + protocol);
             } catch (Exception e) {
